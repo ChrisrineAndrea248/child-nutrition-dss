@@ -3,6 +3,7 @@ import { BarChart3, ChevronRight, Info, AlertTriangle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { trpc } from "../lib/trpc";
 import { useAuth } from "../_core/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import { getVisibleNavItems, type Role } from "@shared/permissions";
 
 const MODEL_INFO = {
@@ -351,12 +352,13 @@ function OutcomeSection({ outcome, metrics, threshold, validationMetrics, featur
 }
 
 export default function ModelPerformance({ onLogout }: { onLogout?: () => void }) {
+  const { t } = useTranslation();
   return (
-    <Shell title="Model Performance" subtitle="ML model evaluation and monitoring" onLogout={onLogout}>
+    <Shell title={t("routes.model")} subtitle={t("model.subtitle")} onLogout={onLogout}>
       <div className="page-content">
         <div className="breadcrumb">
-          <Link href="/dashboard">Home</Link>
-          <ChevronRight size={13} /> Model Performance
+          <Link href="/dashboard">{t("dashboard.home")}</Link>
+          <ChevronRight size={13} /> {t("routes.model")}
         </div>
 
         <section className="panel" style={{ marginBottom: "18px" }}>

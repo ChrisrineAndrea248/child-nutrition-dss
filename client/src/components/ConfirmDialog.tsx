@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ShieldCheck, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type ConfirmDialogProps = {
   open: boolean;
@@ -16,12 +17,13 @@ export default function ConfirmDialog({
   open,
   title,
   description,
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
+  confirmLabel,
+  cancelLabel,
   destructive = false,
   onCancel,
   onConfirm,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation();
   const confirmRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -37,13 +39,13 @@ export default function ConfirmDialog({
   return (
     <div className="dialog-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onCancel()}>
       <div className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-description">
-        <button className="dialog-close" aria-label="Close confirmation" onClick={onCancel}><X size={17} /></button>
+        <button className="dialog-close" aria-label={t("common.closeConfirmation")} onClick={onCancel}><X size={17} /></button>
         <div className={`dialog-icon ${destructive ? "danger" : ""}`}><ShieldCheck size={22} /></div>
         <h3 id="confirm-dialog-title">{title}</h3>
         <p id="confirm-dialog-description">{description}</p>
         <div className="dialog-actions">
-          <button className="outline-btn" onClick={onCancel}>{cancelLabel}</button>
-          <button ref={confirmRef} className={destructive ? "danger-btn" : "primary-btn"} onClick={onConfirm}>{confirmLabel}</button>
+          <button className="outline-btn" onClick={onCancel}>{cancelLabel ?? t("common.cancel")}</button>
+          <button ref={confirmRef} className={destructive ? "danger-btn" : "primary-btn"} onClick={onConfirm}>{confirmLabel ?? t("common.confirm")}</button>
         </div>
       </div>
     </div>
