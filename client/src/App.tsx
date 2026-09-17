@@ -9,14 +9,16 @@ import ProfilePanel from "./components/ProfilePanel";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useAuth } from "./_core/hooks/useAuth";
 import { getVisibleNavItems, type Role } from "@shared/permissions";
+import { useTranslation } from "react-i18next";
 
 function AccessDenied() {
+  const { t } = useTranslation();
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", fontFamily: "Manrope, sans-serif", color: "#334155" }}>
       <div style={{ fontSize: "48px", marginBottom: "16px" }}>&#128274;</div>
-      <h1 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "8px" }}>Access Denied</h1>
-      <p style={{ fontSize: "13px", color: "#718096", marginBottom: "20px" }}>You do not have permission to view this page.</p>
-      <a href="/dashboard" style={{ padding: "8px 16px", background: "#1265d8", color: "white", borderRadius: "6px", textDecoration: "none", fontSize: "13px", fontWeight: 600 }}>Return to Dashboard</a>
+      <h1 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "8px" }}>{t("app.accessDenied")}</h1>
+      <p style={{ fontSize: "13px", color: "#718096", marginBottom: "20px" }}>{t("app.accessDeniedDetail")}</p>
+      <a href="/dashboard" style={{ padding: "8px 16px", background: "#1265d8", color: "white", borderRadius: "6px", textDecoration: "none", fontSize: "13px", fontWeight: 600 }}>{t("app.returnDashboard")}</a>
     </div>
   );
 }
@@ -28,16 +30,18 @@ function HistoricalResultRoute() {
 }
 
 function ProfilePage() {
+  const { t } = useTranslation();
   const { logout: authLogout } = useAuth();
   const logout = async () => { try { await authLogout(); } catch { /* best effort */ } window.location.href = "/"; };
   return (
-    <Shell title="My Profile" subtitle="Manage your personal information and security." onLogout={logout}>
+    <Shell title={t("app.profile")} subtitle={t("app.profileSubtitle")} onLogout={logout}>
       <ProfilePanel />
     </Shell>
   );
 }
 
 function AppRouter() {
+  const { t } = useTranslation();
   const [, navigate] = useLocation();
   const [lastResult, setLastResult] = useState<any>(null);
   const { loading, isAuthenticated, user, logout: authLogout } = useAuth();
@@ -50,19 +54,19 @@ function AppRouter() {
   const loginScreen = <LoginPage />;
 
   const protectedRoute = (content: React.ReactNode) => {
-    if (loading) return <div className="auth-loading">Checking secure session…</div>;
+    if (loading) return <div className="auth-loading">{t("app.checkingSession")}</div>;
     if (!authenticated) return loginScreen;
     return content;
   };
 
   const permittedRoute = (content: React.ReactNode, path: string) => {
-    if (loading) return <div className="auth-loading">Checking secure session…</div>;
+    if (loading) return <div className="auth-loading">{t("app.checkingSession")}</div>;
     if (!authenticated) return loginScreen;
     if (!visiblePaths.has(path)) return <AccessDenied />;
     return content;
   };
 
-  if (loading) return <div className="auth-loading">Checking secure session…</div>;
+  if (loading) return <div className="auth-loading">{t("app.checkingSession")}</div>;
 
   // Blocking gate: the seeded Administrator (and anyone flagged by an admin
   // password reset) must set a new password before reaching any other page.

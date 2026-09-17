@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import {
   ChevronRight,
@@ -113,6 +114,7 @@ function ExportDropdown({ onExport }: { onExport: (fmt: string) => void }) {
 }
 
 export function RiskProfile({ predictionId }: { predictionId?: string }) {
+  const { t } = useTranslation();
   const [showInputs, setShowInputs] = useState(false);
 
   const query = trpc.history.getByPredictionId.useQuery(
@@ -134,7 +136,7 @@ export function RiskProfile({ predictionId }: { predictionId?: string }) {
 
   if (query.isLoading) {
     return (
-      <Shell title="Risk Profile" subtitle="Loading assessment...">
+      <Shell title={t("routes.riskProfile")} subtitle={t("routes.loadingAssessment")}>
         <div className="page-content">
           <div className="breadcrumb">
             <Link href="/dashboard">Home</Link>
@@ -151,7 +153,7 @@ export function RiskProfile({ predictionId }: { predictionId?: string }) {
 
   if (!record) {
     return (
-      <Shell title="Risk Profile" subtitle="Not found">
+      <Shell title={t("routes.riskProfile")} subtitle={t("routes.notFound")}>
         <div className="page-content">
           <div className="breadcrumb">
             <Link href="/dashboard">Home</Link>
@@ -355,7 +357,7 @@ export function RiskProfile({ predictionId }: { predictionId?: string }) {
   };
 
   return (
-    <Shell title="Risk Profile" subtitle={record.predictionId}>
+    <Shell title={t("routes.riskProfile")} subtitle={record.predictionId}>
       <div className="page-content">
         <div className="breadcrumb">
           <Link href="/dashboard">Home</Link>
