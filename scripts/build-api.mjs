@@ -1,4 +1,7 @@
 import { build } from "esbuild";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 // Bundles the serverless API entrypoint into a single self-contained CJS file
 // at api/index.js so Vercel can deploy it as /api/index without relying on any
