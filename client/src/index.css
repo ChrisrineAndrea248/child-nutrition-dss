@@ -252,6 +252,8 @@ button:disabled{cursor:not-allowed}
 .profile-avatar-wrap{position:relative;flex:none}
 .avatar-upload{position:absolute;right:-4px;bottom:-4px;height:26px;width:26px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;border:2px solid #fff;cursor:pointer;padding:0}
 .avatar-upload:hover{background:#0b4fa8}
+.language-switcher select{height:32px;border:1px solid var(--line);border-radius:7px;background:#fff;color:#41546a;padding:0 26px 0 9px;font-size:11px;font-weight:600;cursor:pointer}
+.login-language{position:absolute;top:20px;right:24px;z-index:2}
 .range-selector{display:flex;gap:4px;background:#f1f5f9;border-radius:8px;padding:3px}
 .range-btn{border:none;background:transparent;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#64748b;cursor:pointer;transition:.15s}
 .range-btn.active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}

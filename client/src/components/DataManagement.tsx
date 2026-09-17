@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Plus, Pencil, Trash2, ChevronRight, ChevronLeft, Baby, AlertTriangle, X } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "../lib/trpc";
@@ -20,15 +21,16 @@ type ChildRow = {
 const PAGE_SIZE = 8;
 
 function EmptyState({ onAdd }: { onAdd: () => void }) {
+  const { t } = useTranslation();
   return (
     <div className="module-state" style={{ padding: "48px 20px" }}>
       <Baby size={40} style={{ color: "#c4d2e2", margin: "0 auto 12px" }} />
-      <p style={{ fontSize: "13px", fontWeight: 600, color: "#334155", marginBottom: "4px" }}>No children registered</p>
+      <p style={{ fontSize: "13px", fontWeight: 600, color: "#334155", marginBottom: "4px" }}>{t("data.noChildren")}</p>
       <p style={{ fontSize: "12px", color: "#718096", marginBottom: "16px" }}>
-        Register a child to begin nutrition assessments.
+        {t("data.noChildrenDescription")}
       </p>
       <button className="primary-btn" onClick={onAdd}>
-        <Plus size={14} /> Register Child
+        <Plus size={14} /> {t("data.registerChild")}
       </button>
     </div>
   );
@@ -49,6 +51,7 @@ function ChildFormModal({
   isPending: boolean;
   generatedId?: string;
 }) {
+  const { t } = useTranslation();
   const isEdit = Boolean(initial);
   const [childId, setChildId] = useState(initial?.childId ?? "");
   const [ageMonths, setAgeMonths] = useState(initial?.ageMonths?.toString() ?? "");
@@ -89,11 +92,11 @@ function ChildFormModal({
     <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal-card" role="dialog" aria-modal="true">
         <button className="dialog-close" onClick={onClose}><X size={17} /></button>
-        <h3>{isEdit ? "Edit Child Record" : "Register New Child"}</h3>
-        <p>{isEdit ? "Update the child's information below." : "Enter the child's details to register them in the system."}</p>
+        <h3>{isEdit ? t("data.editChild") : t("data.registerNewChild")}</h3>
+        <p>{isEdit ? t("data.editDescription") : t("data.registerDescription")}</p>
         <form onSubmit={handleSubmit}>
           <label>
-            Child ID
+            {t("data.childId")}
             <input
               value={childId}
               onChange={(e) => setChildId(e.target.value)}
@@ -109,7 +112,7 @@ function ChildFormModal({
           </label>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 14px" }}>
             <label>
-              Age (months)
+              {t("data.ageMonths")}
               <input
                 type="number"
                 min={0}
@@ -121,7 +124,7 @@ function ChildFormModal({
               />
             </label>
             <label>
-              Sex
+              {t("data.sex")}
               <select value={sex} onChange={(e) => setSex(e.target.value)}>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -130,7 +133,7 @@ function ChildFormModal({
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 14px" }}>
             <label>
-              Weight (kg)
+              {t("data.weight")}
               <input
                 type="number"
                 step="0.1"
@@ -142,7 +145,7 @@ function ChildFormModal({
               />
             </label>
             <label>
-              Height (cm)
+              {t("data.height")}
               <input
                 type="number"
                 step="0.1"
@@ -166,9 +169,9 @@ function ChildFormModal({
             />
           </label>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "9px", marginTop: "18px" }}>
-            <button type="button" className="outline-btn" onClick={onClose}>Cancel</button>
+            <button type="button" className="outline-btn" onClick={onClose}>{t("data.cancel")}</button>
             <button type="submit" className="primary-btn" disabled={isPending}>
-              {isPending ? "Saving..." : isEdit ? "Update Child" : "Register Child"}
+              {isPending ? t("data.saving") : isEdit ? t("data.updateChild") : t("data.registerChild")}
             </button>
           </div>
         </form>
@@ -178,6 +181,7 @@ function ChildFormModal({
 }
 
 export default function DataManagement() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
   const [query, setQuery] = useState("");
@@ -305,13 +309,13 @@ export default function DataManagement() {
     <>
       <div className="panel-heading" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
         <div>
-          <h2>Children Registered</h2>
+          <h2>{t("data.childrenRegistered")}</h2>
           <p style={{ fontSize: "12px", color: "#718096", margin: "2px 0 0" }}>
             {loading ? "Loading..." : `${children.length} child${children.length !== 1 ? "ren" : ""} in the system`}
           </p>
         </div>
         <button className="primary-btn" onClick={openCreate} style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-          <Plus size={14} /> Register Child
+          <Plus size={14} /> {t("data.registerChild")}
         </button>
       </div>
 
@@ -321,17 +325,17 @@ export default function DataManagement() {
           <input
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(0); }}
-            placeholder="Search by child ID, sex, or age..."
+            placeholder={t("data.searchPlaceholder")}
           />
         </div>
       </div>
 
       {loading && (
-        <div className="module-state">Loading children...</div>
+        <div className="module-state">{t("data.loading")}</div>
       )}
 
       {error && (
-        <div className="module-state error">Unable to load children. Please try again.</div>
+        <div className="module-state error">{t("data.loadError")}</div>
       )}
 
       {!loading && !error && children.length === 0 && (
@@ -344,14 +348,14 @@ export default function DataManagement() {
             <table>
               <thead>
                 <tr>
-                  <th>Child ID</th>
-                  <th>Age</th>
-                  <th>Sex</th>
-                  <th>Weight (kg)</th>
-                  <th>Height (cm)</th>
+                  <th>{t("data.childId")}</th>
+                  <th>{t("data.age")}</th>
+                  <th>{t("data.sex")}</th>
+                  <th>{t("data.weight")}</th>
+                  <th>{t("data.height")}</th>
                   <th>MUAC (cm)</th>
-                  <th>Registered</th>
-                  <th style={{ textAlign: "right" }}>Actions</th>
+                  <th>{t("data.registered")}</th>
+                  <th style={{ textAlign: "right" }}>{t("data.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -385,11 +389,11 @@ export default function DataManagement() {
                         <td>
                           <div className="table-actions" style={{ justifyContent: "flex-end" }}>
                             <button className="table-action" onClick={() => openEdit(child)}>
-                              <Pencil size={12} /> Edit
+                              <Pencil size={12} /> {t("data.edit")}
                             </button>
                             {isAdmin && (
                               <button className="table-action danger" onClick={() => setDeleteTarget(child)}>
-                                <Trash2 size={12} /> Delete
+                                <Trash2 size={12} /> {t("data.delete")}
                               </button>
                             )}
                           </div>

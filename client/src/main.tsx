@@ -5,6 +5,7 @@ import { httpBatchLink } from "@trpc/client";
 import { createRoot } from "react-dom/client";
 import superjson from "superjson";
 import App from "./App";
+import "./i18n";
 import "./index.css";
 
 const queryClient = new QueryClient();
