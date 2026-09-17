@@ -1119,6 +1119,7 @@ type AssessmentField = {
   type: "text" | "number" | "select";
   required: boolean;
   options?: string[];
+  optionKeys?: string[];
   min?: number;
   max?: number;
   hint?: string;
@@ -1129,7 +1130,7 @@ const assessmentFieldSets: AssessmentField[][] = [
     { label: "Child ID", key: "childId", modelVar: "childId", type: "childSelect" as any, required: true, hint: "Select a registered child" },
     { label: "Child age", key: "CAGE", modelVar: "CAGE", type: "number", required: true, min: 0, max: 120, hint: "Age in months (0–120)" },
     { label: "Child weight", key: "WB4", modelVar: "WB4", type: "number", required: true, min: 0, hint: "Weight in kilograms" },
-    { label: "Child sex", key: "HL4", modelVar: "HL4", type: "select", required: true, options: ["Masculin", "Féminin"] },
+    { label: "Child sex", key: "HL4", modelVar: "HL4", type: "select", required: true, options: ["Masculin", "Féminin"], optionKeys: ["male", "female"] },
   ],
   [
     { label: "Mother's age", key: "WAGEM", modelVar: "WAGEM", type: "number", required: true, min: 10, max: 65, hint: "Age in years" },
@@ -1137,12 +1138,12 @@ const assessmentFieldSets: AssessmentField[][] = [
     { label: "Children currently surviving", key: "CSURV", modelVar: "CSURV", type: "number", required: true, min: 0, hint: "Living children" },
     { label: "Children who have died", key: "CDEAD", modelVar: "CDEAD", type: "number", required: true, min: 0, hint: "Deceased children" },
     { label: "Birth interval", key: "CM11", modelVar: "CM11", type: "number", required: true, min: 0, max: 120, hint: "Months since previous birth" },
-    { label: "Mother's marital status", key: "MSTATUS", modelVar: "MSTATUS", type: "select", required: true, options: ["Actuellement mariée/ou en union", "Formellement mariée /ou en union", "Jamais mariée /en union"] },
-    { label: "Recent live birth", key: "CM17", modelVar: "CM17", type: "select", required: true, options: ["Au moins une naissance vivante dans les 2 dernières années", "Pas de naissances vivantes dans les 2 dernières années"] },
+    { label: "Mother's marital status", key: "MSTATUS", modelVar: "MSTATUS", type: "select", required: true, options: ["Actuellement mariée/ou en union", "Formellement mariée /ou en union", "Jamais mariée /en union"], optionKeys: ["currentlyMarried", "formerlyMarried", "neverMarried"] },
+    { label: "Recent live birth", key: "CM17", modelVar: "CM17", type: "select", required: true, options: ["Au moins une naissance vivante dans les 2 dernières années", "Pas de naissances vivantes dans les 2 dernières années"], optionKeys: ["recentBirthYes", "recentBirthNo"] },
   ],
   [
-    { label: "Place of residence", key: "HH6", modelVar: "HH6", type: "select", required: true, options: ["Rural", "Urbain"] },
-    { label: "Household wealth level", key: "windex5", modelVar: "windex5", type: "select", required: true, options: ["Le plus pauvre", "Le plus riche", "Pauvre", "Moyen", "Riche"] },
+    { label: "Place of residence", key: "HH6", modelVar: "HH6", type: "select", required: true, options: ["Rural", "Urbain"], optionKeys: ["rural", "urban"] },
+    { label: "Household wealth level", key: "windex5", modelVar: "windex5", type: "select", required: true, options: ["Le plus pauvre", "Le plus riche", "Pauvre", "Moyen", "Riche"], optionKeys: ["poorest", "richest", "poor", "middle", "rich"] },
     { label: "Drinking water source", key: "WS1", modelVar: "WS1", type: "select", required: true, options: [
       "PUITS A POMPE/FORAGE", "SOURCE: SOURCE NON PROTEGEE", "PUITS CREUSE: PAS PROTEGE",
       "ROBINET: ROBIENT PUBLIC/BORNE FONTAINE", "PUITS CREUSE: PROTEGE",
@@ -1150,7 +1151,7 @@ const assessmentFieldSets: AssessmentField[][] = [
       "SOURCE: SOURCE PROTEGEE", "ROBINET: CHEZ LE VOISIN",
       "ROBINET: DANS LA CONCESSION/JARDIN/PARCELLE", "ROBINET: DANS LE LOGEMENT",
       "KIOSQUE A EAU", "CAMION CITERNE", "EAU DE PLUIE", "EAU CONDITIONNEE: EAU EN SACHET", "AUTRE", "CHARRETTE AVEC PETITE CITERNE",
-    ] },
+    ], optionKeys: ["pipedBorehole", "unprotectedSpring", "unprotectedWell", "publicTap", "protectedWell", "surfaceWater", "protectedSpring", "neighborTap", "yardTap", "homeTap", "waterKiosk", "tanker", "rainwater", "bottledWater", "other", "cartTank"] },
     { label: "Toilet facility", key: "WS11", modelVar: "WS11", type: "select", required: true, options: [
       "LATRINE A FOSSE: SANS DALLE/FOSSE OUVERTE", "PAS DE TOILETTES/ NATURE/CHAMPS",
       "LATRINE A FOSSE: AVEC DALLE", "TOILETTE A COMPOSTAGE",
@@ -1158,10 +1159,10 @@ const assessmentFieldSets: AssessmentField[][] = [
       "LATRINE A FOSSE: AMELIOREE VENTILEE", "CHASSE D'EAU: RELIEE A FOSSE SCEPTIQUE",
       "CHASSE D'EAU: RELIEE A SYSTEME D'EGOUTS", "CHASSE D'EAU: RELIEE A L'AIR LIBRE",
       "AUTRE", "CHASSE D'EAU: RELIEE A LIEU INCONNU",
-    ] },
-    { label: "Household water treatment", key: "WS15", modelVar: "WS15", type: "select", required: true, options: ["OUI", "NON"] },
-    { label: "Mother's education level", key: "welevel", modelVar: "welevel", type: "select", required: true, options: ["Préscolaire ou aucun", "Fondamental 1", "Fondamental 2", "Secondaire ou plus"] },
-    { label: "Health insurance coverage", key: "insurance", modelVar: "insurance", type: "select", required: true, options: ["Sans assurance", "Avec assurance"] },
+    ], optionKeys: ["pitNoSlab", "noToilet", "pitSlab", "compost", "hanging", "flushLatrine", "ventilated", "flushSeptic", "flushSewer", "flushOpen", "other", "flushUnknown"] },
+    { label: "Household water treatment", key: "WS15", modelVar: "WS15", type: "select", required: true, options: ["OUI", "NON"], optionKeys: ["yes", "no"] },
+    { label: "Mother's education level", key: "welevel", modelVar: "welevel", type: "select", required: true, options: ["Préscolaire ou aucun", "Fondamental 1", "Fondamental 2", "Secondaire ou plus"], optionKeys: ["preschoolNone", "primary1", "primary2", "secondaryPlus"] },
+    { label: "Health insurance coverage", key: "insurance", modelVar: "insurance", type: "select", required: true, options: ["Sans assurance", "Avec assurance"], optionKeys: ["uninsured", "insured"] },
   ],
 ];
 
@@ -1221,8 +1222,9 @@ export function PredictionForm({ onComplete }: { onComplete: (r: Result) => void
   const generateIdQuery = trpc.prediction.generateId.useQuery(undefined, { enabled: false });
 
   const currentFields: AssessmentField[] = assessmentFieldSets[step] ?? [];
-  const fieldLabels: Record<string, string> = { childId: t("prediction.childId"), CAGE: t("prediction.childAge"), WB4: t("prediction.childWeight"), HL4: t("prediction.childSex"), WAGEM: t("prediction.mothersAge") };
+  const fieldLabels: Record<string, string> = { childId: t("prediction.childId"), CAGE: t("prediction.childAge"), WB4: t("prediction.childWeight"), HL4: t("prediction.childSex"), WAGEM: t("prediction.mothersAge"), CEB: t("prediction.fields.CEB"), CSURV: t("prediction.fields.CSURV"), CDEAD: t("prediction.fields.CDEAD"), CM11: t("prediction.fields.CM11"), MSTATUS: t("prediction.fields.MSTATUS"), CM17: t("prediction.fields.CM17"), HH6: t("prediction.fields.HH6"), windex5: t("prediction.fields.windex5"), WS1: t("prediction.fields.WS1"), WS11: t("prediction.fields.WS11"), WS15: t("prediction.fields.WS15"), welevel: t("prediction.fields.welevel"), insurance: t("prediction.fields.insurance") };
   const fieldHints: Record<string, string> = { CAGE: t("prediction.ageMonths"), WB4: t("prediction.weightKilograms") };
+    const optionLabel = (field: AssessmentField, index: number, value: string) => field.optionKeys?.[index] ? t(`options.${field.optionKeys[index]}`) : value;
   const totalPredictors = allPredictorFields.length;
   const completeCount = countCompletePredictors(form);
 
@@ -1382,11 +1384,13 @@ export function PredictionForm({ onComplete }: { onComplete: (r: Result) => void
   const renderFieldValue = (field: AssessmentField) => {
     const v = form[field.key];
     if (!v) return "\u2014";
-    if (field.key === "CAGE") return `${v} months`;
-    if (field.key === "WB4") return `${v} kg`;
-    if (field.key === "WAGEM") return `${v} years`;
-    if (field.key === "CM11") return `${v} months`;
-    return v;
+    const optionIndex = field.options?.indexOf(v) ?? -1;
+    const displayValue = optionIndex >= 0 ? optionLabel(field, optionIndex, v) : v;
+    if (field.key === "CAGE") return `${displayValue} ${t("units.months")}`;
+    if (field.key === "WB4") return `${displayValue} ${t("units.kg")}`;
+    if (field.key === "WAGEM") return `${displayValue} ${t("units.years")}`;
+    if (field.key === "CM11") return `${displayValue} ${t("units.months")}`;
+    return displayValue;
   };
 
   if (mode === "lookup" && lookupData) {
@@ -1512,7 +1516,7 @@ export function PredictionForm({ onComplete }: { onComplete: (r: Result) => void
                           {field.required && <em>*</em>}
                           <select value={form[field.key] || ""} onChange={(e) => update(field.key, e.target.value)} className={fieldError ? "input-error" : ""}>
                             <option value="">{t("prediction.select")}</option>
-                            {(field.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
+                            {(field.options || []).map((o, index) => <option key={o} value={o}>{optionLabel(field, index, o)}</option>)}
                           </select>
                           {isCarryForward && !showNewChild && (
                             <span style={{ display: "inline-block", marginTop: "3px", fontSize: "10px", fontWeight: 600, color: "#6366f1", background: "#eef2ff", border: "1px solid #c7d2fe", borderRadius: "4px", padding: "1px 6px" }}>
@@ -1557,7 +1561,7 @@ export function PredictionForm({ onComplete }: { onComplete: (r: Result) => void
                     <h3>{t("prediction.childInformation")}</h3>
                     <dl className="review-grid">
                       {assessmentFieldSets[0].map((f) => (
-                        <span key={f.key}><dt>{f.label}</dt><dd>{renderFieldValue(f)}</dd></span>
+                        <span key={f.key}><dt>{fieldLabels[f.key] ?? f.label}</dt><dd>{renderFieldValue(f)}</dd></span>
                       ))}
                     </dl>
                   </div>
@@ -1565,7 +1569,7 @@ export function PredictionForm({ onComplete }: { onComplete: (r: Result) => void
                     <h3>{t("prediction.maternalInformation")}</h3>
                     <dl className="review-grid">
                       {assessmentFieldSets[1].map((f) => (
-                        <span key={f.key}><dt>{f.label}</dt><dd>{renderFieldValue(f)}</dd></span>
+                        <span key={f.key}><dt>{fieldLabels[f.key] ?? t(`prediction.fields.${f.key}`)}</dt><dd>{renderFieldValue(f)}</dd></span>
                       ))}
                     </dl>
                   </div>
@@ -1573,7 +1577,7 @@ export function PredictionForm({ onComplete }: { onComplete: (r: Result) => void
                     <h3>{t("prediction.householdEnvironment")}</h3>
                     <dl className="review-grid">
                       {assessmentFieldSets[2].map((f) => (
-                        <span key={f.key}><dt>{f.label}</dt><dd>{renderFieldValue(f)}</dd></span>
+                        <span key={f.key}><dt>{t(`prediction.fields.${f.key}`)}</dt><dd>{renderFieldValue(f)}</dd></span>
                       ))}
                     </dl>
                   </div>
