@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Check, Download, Info, Search, ShieldCheck, Trash2, UserRound, UserCheck, UserX, ShieldOff, ShieldAlert, RotateCcw, Mail, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
@@ -45,6 +46,7 @@ function initials(value: string): string {
 }
 
 function RoleBadge({ role }: { role: string }) {
+  const { t } = useTranslation();
   const cls = role === "admin" ? "admin" : role === "nutrition_officer" ? "officer" : "data";
   return <span className={`role-badge ${cls}`}>{ROLE_LABELS[role] ?? role.replace(/_/g, " ")}</span>;
 }
@@ -81,6 +83,7 @@ function PermissionSummary({ role }: { role: string }) {
 }
 
 export default function UsersPanel() {
+  const { t } = useTranslation();
   const { user: currentUser } = useAuth();
   const utils = trpc.useUtils();
   const users = trpc.users.list.useQuery();
@@ -252,12 +255,12 @@ export default function UsersPanel() {
           <Search size={16} />
           <input placeholder="Search users..." value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
-        <select className="role-select" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} aria-label="Filter by role">
-          <option value="all">All roles</option>
+        <select className="role-select" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} aria-label={t("users.filterRole")}>
+          <option value="all">{t("users.allRoles")}</option>
           {ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
         </select>
-        <select className="role-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} aria-label="Filter by status">
-          <option value="all">All statuses</option>
+        <select className="role-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} aria-label={t("users.filterStatus")}>
+          <option value="all">{t("users.allStatuses")}</option>
           {STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
         </select>
         <div className="toolbar-actions">
