@@ -159,7 +159,8 @@ export async function runPrediction(input: Record<string, unknown>): Promise<Dss
   const payload = JSON.stringify({ input });
 
   return new Promise((resolve) => {
-    const proc = spawn("py", [PYTHON_SCRIPT], {
+    const pythonBin = process.env.PYTHON_BIN || (process.platform === "win32" ? "py" : "python3");
+    const proc = spawn(pythonBin, [PYTHON_SCRIPT], {
       env: { ...process.env, PYTHONIOENCODING: "utf-8" },
     });
 
